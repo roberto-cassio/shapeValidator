@@ -2,13 +2,26 @@ import shape_conversion
 import intersection
 import math
 import credentials
+
+import tkinter as tk
+from tkinter import filedialog
+
+
 #import GUI
 #Volta Somente os Talhões que já Existem no Sistema
 #Todos eles são pontos de atenção
 #Se o id_projeto for diferente do recset[3] então adicionar um Atenção na última coluna, caso contrário deixar um OK
 # Problema em encontrar alguns shapes com a query, verificar
 
+def select_path():
+    # Cria a janela oculta
+    root = tk.Tk()
+    root.withdraw()  # Esconde a janela principal
 
+    # Abre o diálogo para seleção de arquivo
+    file_path = filedialog.askopenfilename(title="Favor selecionar o local do Shapefile")
+
+    return file_path
 
 def show_menu():
     print("\nMenu de Opções")
@@ -43,10 +56,11 @@ while True:
 
     if option == '1':
         client = input('Favor inserir a sigla do Cliente:')
-        credentials.set_client(client)
+        database = credentials.set_client(client)
+        path = select_path()
         project_id_column = input('Nome do Talhão no Shapefile:')
-        wkt_conversions = shape_conversion.shapeConverter(project_id_column)
-        intersection = intersection.Intersection(wkt_conversions)
+        wkt_conversions = shape_conversion.shapeConverter(project_id_column, path)
+        intersection = intersection.Intersection(wkt_conversions, database)
 
         id_projeto = [wkt[0] for wkt in wkt_conversions]
         verify_shapes()
@@ -54,8 +68,8 @@ while True:
         print("Saindo...")
         break
     else:
-        print("Opção inválida! Tente novamente.")
 
+        print("Opção inválida! Tente novamente.")
 
 
 

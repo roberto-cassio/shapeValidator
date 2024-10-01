@@ -1,8 +1,8 @@
 import geopandas as gpd
 from shapely import wkt
 
-def shapeConverter(project_id_column):
-    gpdShape = gpd.read_file('SHP/GEO_AMBIO_AREA_PRODUTIVA.zip')
+def shapeConverter(project_id_column, path_to_shape):
+    gpdShape = gpd.read_file(path_to_shape)
 
 
 
@@ -16,3 +16,4 @@ def shapeConverter(project_id_column):
         geometry_wkt = wkt.dumps(row['geometry'])
         wkt_conversions.append((id_projeto, geometry_wkt))
     return wkt_conversions
+

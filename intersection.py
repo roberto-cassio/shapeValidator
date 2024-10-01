@@ -2,8 +2,8 @@ import psycopg2 as psycopg
 import credentials
 
 rec_list_all = []
-def Intersection(wkt_conversion):
-    connection = psycopg.connect(host='credentials.host', database='credentials.database', user='credentials.user', password='credentials.password')
+def Intersection(wkt_conversion, database):
+    connection = psycopg.connect(host=credentials.host, database=database, user=credentials.user, password=credentials.password)
     cursor = connection.cursor()
     print("Query")
     for id_projeto, geometry_wkt in wkt_conversion:
