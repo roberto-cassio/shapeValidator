@@ -14,12 +14,10 @@ from tkinter import filedialog
 # Problema em encontrar alguns shapes com a query, verificar
 
 def select_path():
-    # Cria a janela oculta
     root = tk.Tk()
-    root.withdraw()  # Esconde a janela principal
+    root.withdraw()
 
-    # Abre o diálogo para seleção de arquivo
-    file_path = filedialog.askopenfilename(title="Favor selecionar o local do Shapefile")
+    file_path = filedialog.askopenfilename(title="Favor selecionar o local do Shapefile (.zip)", filetypes=[("Arquivos ZIP", "*.zip")])
 
     return file_path
 
@@ -58,8 +56,7 @@ while True:
         client = input('Favor inserir a sigla do Cliente:')
         database = credentials.set_client(client)
         path = select_path()
-        project_id_column = input('Nome do Talhão no Shapefile:')
-        wkt_conversions = shape_conversion.shapeConverter(project_id_column, path)
+        wkt_conversions = shape_conversion.shapeConverter(path)
         intersection = intersection.Intersection(wkt_conversions, database)
 
         id_projeto = [wkt[0] for wkt in wkt_conversions]
