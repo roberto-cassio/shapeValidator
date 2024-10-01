@@ -1,6 +1,7 @@
 import shape_conversion
 import intersection
 import math
+import credentials
 #import GUI
 #Volta Somente os Talhões que já Existem no Sistema
 #Todos eles são pontos de atenção
@@ -41,6 +42,8 @@ while True:
     option = input("Escolha uma opção: ")
 
     if option == '1':
+        client = input('Favor inserir a sigla do Cliente:')
+        credentials.set_client(client)
         project_id_column = input('Nome do Talhão no Shapefile:')
         wkt_conversions = shape_conversion.shapeConverter(project_id_column)
         intersection = intersection.Intersection(wkt_conversions)
