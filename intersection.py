@@ -5,8 +5,7 @@ rec_list_all = []
 def Intersection(wkt_conversion, database):
     connection = psycopg.connect(host=credentials.host, database=database, user=credentials.user, password=credentials.password)
     cursor = connection.cursor()
-    print("Query")
-    for id_projeto, geometry_wkt in wkt_conversion:
+    for index, (id_projeto, geometry_wkt) in enumerate(wkt_conversion):
         sql=f'''
         WITH area_temp AS (
             SELECT ST_GeomFromText('{geometry_wkt}', 3857) AS area
@@ -40,7 +39,8 @@ def Intersection(wkt_conversion, database):
 
         cursor.execute(sql)
         rec_list = cursor.fetchall()
-        print("Rec-List start" + id_projeto)
+
+        print(f"Progresso: {100 * (index + 1) / len(wkt_conversion):.2f}%")
         if rec_list:
             for rec in rec_list:
                 rec_with_id = list(rec) + [id_projeto]

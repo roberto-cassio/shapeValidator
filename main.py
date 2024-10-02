@@ -28,7 +28,6 @@ def show_menu():
 
 def verify_shapes():
     count = 1
-    print(wkt_conversions[0])
     for item in intersection:
         rec_list = list(item)
         rec_list[-3] = f"{math.trunc(rec_list[-3] * 100)}%"
