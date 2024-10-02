@@ -26,7 +26,12 @@ def show_menu():
     print("1. Verificar Talhões")
     print("2. Sair")
 
+
 def verify_shapes():
+    ok_shapes = []
+    attention_shapes = []
+    new_shapes = []
+
     count = 1
     for item in intersection:
         rec_list = list(item)
@@ -34,19 +39,28 @@ def verify_shapes():
         rec_list[-2] = f"{math.trunc(rec_list[-2] * 100)}%"
 
         if not rec_list[1] and not rec_list[2]:
-            rec_list.append("New")
-            print(rec_list[5:])
-            print(f'{count}/{len(intersection)}')
+            new_shapes.append(rec_list[5:])  # Armazena na lista de 'New'
         elif rec_list[-1] != rec_list[2]:
-            rec_list.append("Attention")
-            print(rec_list[1:])
-            print(f'{count}/{len(intersection)}')
+            attention_shapes.append(rec_list[1:])  # Armazena na lista de 'Attention'
         else:
-            rec_list.append("OK")
-            print(rec_list[1:])
-            print(f'{count}/{len(intersection)}')
+            ok_shapes.append(rec_list[1:])  # Armazena na lista de 'OK'
 
         count += 1
+
+    # Exibe as listas de forma separada
+    print("\nShapes que existem mas estão OK para Subir:")
+    for idx, shape in enumerate(ok_shapes, 1):
+        print(f"{idx}: {shape}")
+
+    print("\nShapes para se Atentar:")
+    for idx, shape in enumerate(attention_shapes, 1):
+        print(f"{idx}: {shape}")
+
+    print("\nShapes Novos:")
+    for idx, shape in enumerate(new_shapes, 1):
+        print(f"{idx}: {shape}")
+
+
 while True:
     show_menu()
     option = input("Escolha uma opção: ")
