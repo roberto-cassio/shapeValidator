@@ -1,3 +1,5 @@
+from pandas.io.formats.format import return_docstring
+
 import shape_conversion
 import intersection
 import math
@@ -17,10 +19,18 @@ def select_path():
     root = tk.Tk()
     root.withdraw()
 
-    file_path = filedialog.askopenfilename(title="Favor selecionar o local do Shapefile (.zip)", filetypes=[("Arquivos ZIP", "*.zip")])
+    file_path = filedialog.askopenfilename(title="Favor selecionar o local do Shapefile (.zip)")
 
     return file_path
 
+def select_output_path():
+    root = tk.Tk()
+    root.withdraw()
+
+    file_path = filedialog.askdirectory(title="Favor selecionar o local onde o Shapefile será armazenado",
+                                           filetypes=[("Arquivos ZIP", "*.zip")])
+
+    return file_path
 def show_menu():
     print("\nMenu de Opções")
     print("1. Verificar Talhões")
@@ -60,6 +70,8 @@ def verify_shapes():
     for idx, shape in enumerate(new_shapes, 1):
         print(f"{idx}: {shape}")
 
+    return ok_shapes, new_shapes, attention_shapes
+
 
 while True:
     show_menu()
@@ -69,11 +81,20 @@ while True:
         client = input('Favor inserir a sigla do Cliente:')
         database = credentials.set_client(client)
         path = select_path()
-        wkt_conversions = shape_conversion.shapeConverter(path)
+        project_id,wkt_conversions = shape_conversion.shapeConverter(path)
         intersection = intersection.Intersection(wkt_conversions, database)
 
         id_projeto = [wkt[0] for wkt in wkt_conversions]
-        verify_shapes()
+        ok_shapes, new_shapes, attention_shapes = verify_shapes()
+
+        if len(attention_shapes) != 0:
+            option2 = input("Deseja que o ShapeFiles dentro do padrão sejam removidos do ShapeFile? \n 1-Sim 2-Não")
+            if option2 == '1':
+                print ("Favor inserir o local de saída do novo Shapefile")
+                output_path = select_output_path()
+                shape_conversion.generate_new_shapefile(new_shapes, ok_shapes, path, project_id, output_path)
+            else:
+                show_menu()
     elif option == '2':
         print("Saindo...")
         break
